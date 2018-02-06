@@ -7,9 +7,10 @@ class Canvas extends Component {
       rectangles,
       updateRectangle,
       editRectangle,
+      editingRectangle,
       deleteRectangle
     } = this.props;
-
+    console.log(editingRectangle)
     return (
       <div
         id="canvas">
@@ -38,8 +39,7 @@ class Canvas extends Component {
             }}
             position={{x: rectangle.x, y: rectangle.y}}
             style={{
-              border: `2px dashed #fff`,
-              borderPosition: 'inset',
+              border: editingRectangle === i ? '3px solid green': '3px dashed #fff',
               fontSize: '14px',
               position: 'absolute',
               backgroundColor: rectangle.color,
@@ -65,7 +65,21 @@ class Canvas extends Component {
           </Rnd>
         ))
         :
-          null
+          <div
+            style={{
+              width: '80%',
+              height: '22px',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              margin: 'auto',
+              textAlign: 'center'
+            }}>
+            <i className="fas fa-long-arrow-alt-left"/>&nbsp;
+            Add some rectangles
+          </div>
         }
       </div>
     )

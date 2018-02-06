@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Canvas from './components/canvas';
-import { BlockPicker } from 'react-color';
+import Builder from './components/builder';
+import SavedLayouts from './components/saved-layouts';
 
 class App extends Component {
   state = {
@@ -12,6 +13,7 @@ class App extends Component {
     savedLayouts: [],
     showColorPicker: false,
     editingLayout: false,
+    editingRectangle: null,
     nameInvalid: false
   }
 
@@ -30,37 +32,105 @@ class App extends Component {
   }
 
   handleColorChange = (color) => {
+    let editingRectangle = this.state.editingRectangle;
+    if (this.state.editingRectangle != null) {
+      let rectangle = this.state.rectangles[editingRectangle]
+      rectangle.color = color.hex
+    }
     this.setState({
       color: color.hex,
-      showColorPicker: false
+      showColorPicker: false,
+      editingRectangle: null
     });
   };
 
-  _clearCanvas = () => {
+  clearCanvas = () => {
     this.setState({
       rectangles: []
     })
     localStorage.removeItem('layout');
   }
 
-  _saveCanvas = () => {
-    const {rectangles, savedLayouts, layoutName} = this.state;
+  saveCanvas = () => {
+    const {
+      rectangles,
+      layoutName,
+      editingLayout,
+      savedLayouts
+    } = this.state;
+
     if (!layoutName) {
       return this.setState({
         nameInvalid: true
       })
     }
 
-    let layouts = savedLayouts
-    let layout = Object.assign({}, {layout: rectangles}, {name: layoutName})
-    layouts.push(layout)
+    let newLayouts = savedLayouts
+    let newLayout = Object.assign({}, {layout: rectangles}, {name: layoutName})
+
+    if (editingLayout) {
+      newLayouts.splice(editingLayout, 1, newLayout)
+    } else {
+      newLayouts.push(newLayout)
+    }
+
     this.setState({
-      savedLayouts: layouts,
       rectangles: [],
       layoutName: ''
+    });
+
+    localStorage.setItem("layouts", JSON.stringify(newLayouts))
+    localStorage.removeItem("layout")
+  }
+
+  createRectangle = () => {
+    const {rectangles, startingHeight, startingWidth, color, x, y} = this.state;
+    let newRectangles = rectangles
+    newRectangles.splice(0,0, {
+      width: startingWidth,
+      height: startingHeight,
+      color: color,
+      x: Math.random() * (x-startingWidth),
+      y: Math.random() * (y - startingHeight)
+    })
+    this.setState({
+      rectangles: newRectangles
     })
 
-    localStorage.setItem("layouts", JSON.stringify(layouts))
+    localStorage.setItem('layout', JSON.stringify(newRectangles))
+  }
+
+  toggleColorPicker = () => {
+    this.setState({
+      showColorPicker: !this.state.showColorPicker
+    })
+  }
+
+  handleNameChange = (value) => {
+    this.setState({
+      layoutName: value,
+      nameInvalid: !value.length
+    })
+  }
+
+  deleteLayout = (index) => {
+    const {savedLayouts} = this.state;
+    let layouts = savedLayouts
+    layouts.splice(index, 1)
+    this.setState({
+      savedLayouts: layouts
+    })
+    localStorage.setItem('layouts', JSON.stringify(layouts))
+  }
+
+  selectLayout = (index) => {
+    let selectedLayout = this.state.savedLayouts[index]
+
+    this.setState({
+      rectangles: selectedLayout.layout,
+      editingLayout: index,
+      layoutName: selectedLayout.name
+    })
   }
 
   updateRectangle = (index, payload) => {
@@ -82,23 +152,13 @@ class App extends Component {
 
   }
 
-  _createRectangle = () => {
-    const {rectangles, startingHeight, startingWidth, color, x, y} = this.state;
-    let newRectangles = rectangles
-    newRectangles.splice(0,0, {
-      width: startingWidth,
-      height: startingHeight,
-      color: color,
-      x: Math.random() * (x-startingWidth),
-      y: Math.random() * (y - startingHeight)
-    })
-    this.setState({
-      rectangles: newRectangles
-    })
-  }
-
   editRectangle = (index) => {
-    console.log(index)
+    let rectangle = this.state.rectangles[index];
+    this.setState({
+      showColorPicker: true,
+      color: rectangle.color,
+      editingRectangle: index
+    })
   }
 
   deleteRectangle = (index) => {
@@ -106,36 +166,6 @@ class App extends Component {
     newRectangles.splice(index, 1)
     this.setState({
       rectangles: newRectangles
-    })
-  }
-  _toggleColorPicker = () => {
-    this.setState({
-      showColorPicker: !this.state.showColorPicker
-    })
-  }
-
-  _handleNameChange = (value) => {
-    this.setState({
-      layoutName: value
-    })
-  }
-
-  _deleteLayout = (index) => {
-    const {savedLayouts} = this.state;
-    let layouts = savedLayouts
-    layouts.splice(index, 1)
-    this.setState({
-      savedLayouts: layouts
-    })
-    localStorage.setItem('layouts', JSON.stringify(layouts))
-  }
-
-  _selectLayout = (index) => {
-    let selectedLayout = this.state.savedLayouts[index]
-
-    this.setState({
-      rectangles: selectedLayout.layout,
-      editing: true
     })
   }
 
@@ -152,96 +182,46 @@ class App extends Component {
       rectangles,
       color,
       savedLayouts,
-      nameInvalid
+      nameInvalid,
+      showColorPicker,
+      layoutName
     } = this.state;
 
 
     return (
       <div className="App">
         <div id="main-content">
-          <div id="rect-builder">
-            {/* <p id="rect-builder-description">
-              Choose a color and add it to the canvas. Once added, you can&nbsp;
-              change size and position as you please!
-            </p> */}
-            <div
-              style={{
-                backgroundColor: color
-              }}
-              id="rectangle-preview">
-                <button
-                  onClick={() => this._toggleColorPicker()}
-                  className="btn-outline">change color</button>
-              </div>
-              {this.state.showColorPicker ?
-                <BlockPicker
-                  color={this.state.color}
-                  onChangeComplete={this.handleColorChange}
-                />
-              :
-                null
-              }
-              <button
-                id="add-to-canvas-button"
-                onClick={() => this._createRectangle()}>
-                <i className="fas fa-plus"/>&nbsp;
-                Add Rectangle
-              </button>
-
-              <button
-                id="clear-canvas"
-                onClick={() => this._clearCanvas()}>
-                <i className="fas fa-recycle"/>&nbsp;
-                Clear Canvas
-              </button>
-          </div>
+          <Builder
+            color={color}
+            toggleColorPicker={this.toggleColorPicker}
+            showColorPicker={showColorPicker}
+            handleColorChange={this.handleColorChange}
+            createRectangle={this.createRectangle}
+            clearCanvas={this.clearCanvas} />
 
           <Canvas
             deleteRectangle={this.deleteRectangle}
             editRectangle={this.editRectangle}
+            editingRectangle={this.state.editingRectangle}
             updateRectangle={this.updateRectangle}
             rectangles={rectangles} />
 
-          <div id="saved-layouts">
-            <div id="save-layout-form">
-              <input
-                style={nameInvalid ? {border: '1px solid red', color: 'red'} : null}
-                placeholder='Name your layout'
-                value={this.state.layoutName}
-                onChange={(e) => this._handleNameChange(e.target.value)}
-                type="text"/>
-              <button
-                onClick={() => this._saveCanvas()}>
-                Save
-              </button>
-            </div>
-            <ul id="layout-list">
-              <h4>My Layouts</h4>
-              {savedLayouts.length ? savedLayouts.map((layout, i) => (
-                <li
-                  key={i}
-                  className="saved-layouts-list-item">
-                  <a
-                    key={i}
-                    className="select-layout"
-                    role="button"
-                    onClick={() => this._selectLayout(i)}>
-                    {layout.name}
-                  </a>
-                  <a
-                    className="delete-layout"
-                    onClick={() => this._deleteLayout(i)}
-                    role="button">
-                    <i className="fas fa-times"/>
-                  </a>
-                </li>
-              ))
-              :
-                null
-              }
-            </ul>
-          </div>
+            <SavedLayouts
+              nameInvalid={nameInvalid}
+              layoutName={layoutName}
+              handleNameChange={this.handleNameChange}
+              saveCanvas={this.saveCanvas}
+              savedLayouts={savedLayouts}
+              selectLayout={this.selectLayout}
+              deleteLayout={this.deleteLayout}/>
+
         </div>
+        <a
+          id="download-button"
+          href="/images/myw3schoolsimage.jpg"
+          download>
+          Download App
+        </a>
       </div>
     );
   }

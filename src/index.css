@@ -1,12 +1,12 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: 'Open Sans', sans-serif;
   background-color: #f6f6f6;
 }
 
-#header {
-
+h1, h2, h3, h4 {
+  font-family: 'Rammetto One', cursive;
 }
 
 .App {
@@ -30,7 +30,7 @@ body {
   justify-content: center;
   align-items: center;
   width: 25%;
-  height: 70vh;
+  height: 100%;
   position: relative;
 }
 
@@ -76,41 +76,6 @@ body {
   color: #000;
 }
 
-#saved-layouts {
-  width: 25%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-#save-layout-form {
-  width: 80%;
-  display: flex;
-  align-items: center;
-}
-
-#save-layout-form input {
-  width: 70%;
-  height: 35px;
-  padding: 0px 10px;
-  box-sizing: border-box;
-}
-
-#save-layout-form button {
-  width: 30%;
-  height: 35px;
-  padding: 0px;
-  background-color: #427aa1;
-  border: none;
-  color: #f6f6f6;
-  transition: all 0.25s linear;
-  cursor: pointer;
-}
-
-#save-layout-form button:hover {
-  background-color: #376484;
-}
-
 .block-picker {
   position: absolute !important;
   top: 52%;
@@ -134,11 +99,58 @@ body {
   background-color: #fff;
 }
 
+#clear-canvas {
+  width: 80%;
+  height: 35px;
+  color: #fff;
+  background-color: #e76f51;
+  border: none;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
 #layout-list {
   width: 80%;
   list-style-type: none;
   padding-left: 0px;
 }
+
+#saved-layouts {
+  width: 25%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#save-layout-form {
+  width: 80%;
+  display: flex;
+  align-items: center;
+}
+
+#save-layout-form input {
+  width: 70%;
+  height: 35px;
+  padding: 0px 10px;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+}
+
+#save-layout-form button {
+  width: 30%;
+  height: 35px;
+  padding: 0px;
+  background-color: #427aa1;
+  border: none;
+  color: #f6f6f6;
+  transition: all 0.25s linear;
+  cursor: pointer;
+}
+
+#save-layout-form button:hover {
+  background-color: #376484;
+}
+
 .saved-layouts-list-item {
   width: 100%;
   border-bottom: 1px solid #ddd;
@@ -155,18 +167,8 @@ a.select-layout {
 
 a.delete-layout {
   color: #e76f51;
+  cursor: pointer;
 }
-
-
-#clear-canvas {
-  width: 80%;
-  height: 35px;
-  color: #fff;
-  background-color: #e76f51;
-  border: none;
-  margin-top: 10px;
-}
-
 
 a.edit-rectangle, a.delete-rectangle {
   cursor: pointer;
@@ -175,4 +177,10 @@ a.edit-rectangle, a.delete-rectangle {
 
 a.edit-rectangle:hover, a.delete-rectangle:hover {
   color: #fff;
+}
+
+#download-button {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #474747;
 }
