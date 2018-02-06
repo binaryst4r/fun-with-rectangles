@@ -184,8 +184,12 @@ a.edit-rectangle:hover, a.delete-rectangle:hover {
   color: #fff;
 }
 
-#download-button {
-  margin-top: 20px;
+
+#bottom-links {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   font-size: 14px;
-  color: #474747;
+  padding: 20px 0;
 }

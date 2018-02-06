@@ -229,12 +229,18 @@ class App extends Component {
             deleteLayout={this.deleteLayout}
             editingLayout={editingLayout}/>
         </div>
-        <a
-          id="download-button"
-          href="/images/myw3schoolsimage.jpg"
-          download>
-          Download App
-        </a>
+        <div id="bottom-links">
+          <a
+            id="download-button"
+            href="/images/myw3schoolsimage.jpg"
+            download>
+            Download App
+          </a>
+          or
+          <code>
+            git clone https://github.com/binaryst4r/fun-with-rectangles.git
+          </code>
+        </div>
       </div>
     );
   }
