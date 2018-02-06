@@ -8,7 +8,8 @@ class Canvas extends Component {
       updateRectangle,
       editRectangle,
       editingRectangle,
-      deleteRectangle
+      deleteRectangle,
+      moveRectangle
     } = this.props;
 
     return (
@@ -39,29 +40,45 @@ class Canvas extends Component {
             }}
             position={{x: rectangle.x, y: rectangle.y}}
             style={{
-              border: editingRectangle === i ? '3px solid green': '3px dashed #fff',
+              border: editingRectangle === i ? '3px solid green': `none`,
               fontSize: '14px',
               position: 'absolute',
               backgroundColor: rectangle.color,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: 'rgba(255,255,255, 0.5)'
+              color: 'rgba(255,255,255, 0.5)',
+              zIndex: rectangle.zIndex
             }}>
-            <a
-              alt="hey"
-              className="edit-rectangle"
-              onClick={() => editRectangle(i)}
-              role="button">
-              <i className="fas fa-edit"/>
-            </a>
+            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+              <a
+                className="move"
+                onClick={() => moveRectangle(i, 'up')}
+                role="button">
+                <i className="fas fa-arrow-up"/>
+              </a>
+              <div>
+                <a
+                  className="edit-rectangle"
+                  onClick={() => editRectangle(i)}
+                  role="button">
+                  <i className="fas fa-tint"/>
+                </a>
 
-            <a
-              className="delete-rectangle"
-              onClick={() => deleteRectangle(i)}
-              role="button">
-              <i className="fas fa-times"/>
-            </a>
+                <a
+                  className="delete-rectangle"
+                  onClick={() => deleteRectangle(i)}
+                  role="button">
+                  <i className="fas fa-times"/>
+                </a>
+              </div>
+              <a
+                className="move"
+                onClick={() => moveRectangle(i, 'down')}
+                role="button">
+                <i className="fas fa-arrow-down"/>
+              </a>
+            </div>
           </Rnd>
         ))
         :

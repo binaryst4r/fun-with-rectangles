@@ -12,9 +12,10 @@ class App extends Component {
     rectangles: [],
     savedLayouts: [],
     showColorPicker: false,
-    editingLayout: false,
+    editingLayout: null,
     editingRectangle: null,
-    nameInvalid: false
+    nameInvalid: false,
+    showNotification: false
   }
 
   componentWillMount() {
@@ -43,6 +44,16 @@ class App extends Component {
       editingRectangle: null
     });
   };
+
+  showNotification = (value) => {
+    this.setState({
+      notification: value
+    })
+
+    setTimeout(() => this.setState({
+      notification: false
+    }), 3000)
+  }
 
   clearCanvas = () => {
     this.setState({
@@ -79,25 +90,46 @@ class App extends Component {
       layoutName: ''
     });
 
+    this.showNotification('Your layout has been saved');
+
     localStorage.setItem("layouts", JSON.stringify(newLayouts))
     localStorage.removeItem("layout")
   }
 
   createRectangle = () => {
     const {rectangles, startingHeight, startingWidth, color, x, y} = this.state;
-    let newRectangles = rectangles
+    let newRectangles = rectangles;
+    console.log(newRectangles.length);
     newRectangles.splice(0,0, {
       width: startingWidth,
       height: startingHeight,
       color: color,
       x: Math.random() * (x-startingWidth),
-      y: Math.random() * (y - startingHeight)
-    })
+      y: Math.random() * (y - startingHeight),
+      zIndex: 1
+    });
+
     this.setState({
       rectangles: newRectangles
-    })
+    });
 
-    localStorage.setItem('layout', JSON.stringify(newRectangles))
+    localStorage.setItem('layout', JSON.stringify(newRectangles));
+  }
+
+  moveRectangle = (i, direction) => {
+    let rectangles = this.state.rectangles;
+
+    if (direction === 'up') {
+      rectangles[i].zIndex ++;
+    }
+
+    if (direction === 'down') {
+      rectangles[i].zIndex --;
+    }
+
+    this.setState({
+      rectangles: rectangles
+    });
   }
 
   toggleColorPicker = () => {
@@ -130,7 +162,7 @@ class App extends Component {
       rectangles: selectedLayout.layout,
       editingLayout: index,
       layoutName: selectedLayout.name
-    })
+    });
   }
 
   updateRectangle = (index, payload) => {
@@ -141,7 +173,8 @@ class App extends Component {
       height: payload.height,
       width: payload.width,
       x: payload.x,
-      y: payload.y
+      y: payload.y,
+      zIndex: oldRectangle.zIndex
     })
 
     this.setState({
@@ -170,6 +203,8 @@ class App extends Component {
 
     localStorage.setItem('layout', JSON.stringify(layout.layout))
     localStorage.setItem('layouts', JSON.stringify(this.state.savedLayouts))
+
+    this.showNotification(`You have duplicated ${layout.name}`);
   }
 
   deleteRectangle = (index) => {
@@ -178,6 +213,8 @@ class App extends Component {
     this.setState({
       rectangles: newRectangles
     })
+
+    localStorage.setItem('layout', JSON.stringify(newRectangles))
   }
 
   componentDidMount() {
@@ -196,12 +233,18 @@ class App extends Component {
       nameInvalid,
       showColorPicker,
       layoutName,
-      editingLayout
+      editingLayout,
+      notification
     } = this.state;
 
 
     return (
       <div className="App">
+        {notification ?
+          <div id="notification-bar">
+            {notification}
+          </div>
+        : null }
         <div id="main-content">
           <Builder
             color={color}
@@ -212,6 +255,7 @@ class App extends Component {
             clearCanvas={this.clearCanvas} />
 
           <Canvas
+            moveRectangle={this.moveRectangle}
             deleteRectangle={this.deleteRectangle}
             editRectangle={this.editRectangle}
             editingRectangle={this.state.editingRectangle}
@@ -232,7 +276,7 @@ class App extends Component {
         <div id="bottom-links">
           <a
             id="download-button"
-            href="/images/myw3schoolsimage.jpg"
+            href="https://s3.us-east-2.amazonaws.com/lvg/fun-with-rectangles.zip"
             download>
             Download App
           </a>

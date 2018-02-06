@@ -22,7 +22,7 @@ export class Builder extends Component {
             <button
               onClick={() => toggleColorPicker()}
               className="btn-outline">
-              Change Color
+              <i className="fas fa-tint"/> Change Color
             </button>
           </div>
           {showColorPicker ?

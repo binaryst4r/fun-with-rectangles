@@ -30,7 +30,7 @@ export class SavedLayouts extends Component {
         </div>
         <ul id="layout-list">
           <h4>
-            {editingLayout ? `Editing ${layoutName}` : 'My Layouts'}
+            {editingLayout != null ? `Editing ${layoutName}` : 'My Layouts'}
           </h4>
           {savedLayouts.length ? savedLayouts.map((layout, i) => (
             <li
