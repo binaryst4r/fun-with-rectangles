@@ -195,7 +195,7 @@ a.edit-rectangle, a.delete-rectangle {
   margin: 10px;
 }
 
-a.edit-rectangle:hover, a.delete-rectangle:hover {
+a.edit-rectangle:hover, a.delete-rectangle:hover, a.move:hover {
   color: #fff;
 }
 
