@@ -161,6 +161,17 @@ class App extends Component {
     })
   }
 
+  duplicateLayout = (layout) => {
+    this.state.savedLayouts.push({
+      layout: layout.layout,
+      name: `${layout.name} copy`
+    })
+    this.selectLayout(this.state.savedLayouts.length - 1)
+
+    localStorage.setItem('layout', JSON.stringify(layout.layout))
+    localStorage.setItem('layouts', JSON.stringify(this.state.savedLayouts))
+  }
+
   deleteRectangle = (index) => {
     let newRectangles = this.state.rectangles;
     newRectangles.splice(index, 1)
@@ -208,6 +219,7 @@ class App extends Component {
             rectangles={rectangles} />
 
           <SavedLayouts
+            duplicateLayout={this.duplicateLayout}
             nameInvalid={nameInvalid}
             layoutName={layoutName}
             handleNameChange={this.handleNameChange}

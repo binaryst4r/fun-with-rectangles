@@ -10,7 +10,8 @@ export class SavedLayouts extends Component {
       savedLayouts,
       selectLayout,
       deleteLayout,
-      editingLayout
+      editingLayout,
+      duplicateLayout
     } = this.props;
 
     return (
@@ -42,12 +43,24 @@ export class SavedLayouts extends Component {
                 onClick={() => selectLayout(i)}>
                 {layout.name}
               </a>
-              <a
-                className="delete-layout"
-                onClick={() => deleteLayout(i)}
-                role="button">
-                <i className="fas fa-times"/>
-              </a>
+              <div style={{width: '25%'}}>
+                <small>
+                  <a
+                    className="duplicate-layout"
+                    onClick={() => duplicateLayout(layout)}
+                    role="button">
+                    <i className="fas fa-clone"/>
+                  </a>
+                  &nbsp;
+                  &nbsp;
+                  <a
+                    className="delete-layout"
+                    onClick={() => deleteLayout(i)}
+                    role="button">
+                    <i className="fas fa-trash"/>
+                  </a>
+                </small>
+              </div>
             </li>
           ))
           :

@@ -7,6 +7,7 @@ body {
 
 h1, h2, h3, h4 {
   font-family: 'Rammetto One', cursive;
+  line-height: 1.2;
 }
 
 .App {
@@ -160,6 +161,10 @@ h1, h2, h3, h4 {
 }
 
 a.select-layout {
+  width: 70%;
+}
+
+a.select-layout, a.duplicate-layout {
   color: #427aa1;
   text-decoration: none;
   cursor: pointer;

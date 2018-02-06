@@ -78,7 +78,7 @@ class Canvas extends Component {
               textAlign: 'center'
             }}>
             <i className="fas fa-long-arrow-alt-left"/>&nbsp;
-            Add some rectangles
+            Add Some Rectangles
           </div>
         }
       </div>
