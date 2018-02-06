@@ -87,7 +87,8 @@ class App extends Component {
 
     this.setState({
       rectangles: [],
-      layoutName: ''
+      layoutName: '',
+      editingLayout: null
     });
 
     this.showNotification('Your layout has been saved');
