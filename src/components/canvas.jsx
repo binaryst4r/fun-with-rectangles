@@ -10,7 +10,7 @@ class Canvas extends Component {
       editingRectangle,
       deleteRectangle
     } = this.props;
-    console.log(editingRectangle)
+
     return (
       <div
         id="canvas">
