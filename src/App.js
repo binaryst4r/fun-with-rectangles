@@ -68,7 +68,7 @@ class App extends Component {
     let newLayouts = savedLayouts
     let newLayout = Object.assign({}, {layout: rectangles}, {name: layoutName})
 
-    if (editingLayout) {
+    if (editingLayout != null) {
       newLayouts.splice(editingLayout, 1, newLayout)
     } else {
       newLayouts.push(newLayout)
@@ -184,7 +184,8 @@ class App extends Component {
       savedLayouts,
       nameInvalid,
       showColorPicker,
-      layoutName
+      layoutName,
+      editingLayout
     } = this.state;
 
 
@@ -206,15 +207,15 @@ class App extends Component {
             updateRectangle={this.updateRectangle}
             rectangles={rectangles} />
 
-            <SavedLayouts
-              nameInvalid={nameInvalid}
-              layoutName={layoutName}
-              handleNameChange={this.handleNameChange}
-              saveCanvas={this.saveCanvas}
-              savedLayouts={savedLayouts}
-              selectLayout={this.selectLayout}
-              deleteLayout={this.deleteLayout}/>
-
+          <SavedLayouts
+            nameInvalid={nameInvalid}
+            layoutName={layoutName}
+            handleNameChange={this.handleNameChange}
+            saveCanvas={this.saveCanvas}
+            savedLayouts={savedLayouts}
+            selectLayout={this.selectLayout}
+            deleteLayout={this.deleteLayout}
+            editingLayout={editingLayout}/>
         </div>
         <a
           id="download-button"

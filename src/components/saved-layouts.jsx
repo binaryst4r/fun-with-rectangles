@@ -9,7 +9,8 @@ export class SavedLayouts extends Component {
       saveCanvas,
       savedLayouts,
       selectLayout,
-      deleteLayout
+      deleteLayout,
+      editingLayout
     } = this.props;
 
     return (
@@ -27,7 +28,9 @@ export class SavedLayouts extends Component {
           </button>
         </div>
         <ul id="layout-list">
-          <h4>My Layouts</h4>
+          <h4>
+            {editingLayout ? `Editing ${layoutName}` : 'My Layouts'}
+          </h4>
           {savedLayouts.length ? savedLayouts.map((layout, i) => (
             <li
               key={i}
@@ -48,7 +51,11 @@ export class SavedLayouts extends Component {
             </li>
           ))
           :
-            null
+            <p>
+              <small>
+                You currently have no layouts saved.
+              </small>
+            </p>
           }
         </ul>
       </div>
