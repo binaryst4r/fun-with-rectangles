@@ -3,12 +3,19 @@ import Rnd from 'react-rnd';
 
 class Canvas extends Component {
   render() {
-    const {rectangles, updateRectangle} = this.props;
+    const {
+      rectangles,
+      updateRectangle,
+      editRectangle,
+      deleteRectangle
+    } = this.props;
+
     return (
       <div
         id="canvas">
         {rectangles && rectangles.length ? rectangles.map((rectangle, i) => (
           <Rnd
+            key={i}
             onResize={(e, direction, ref, delta, position) => (
               updateRectangle(i, {
                 width: ref.clientWidth,
@@ -31,6 +38,9 @@ class Canvas extends Component {
             }}
             position={{x: rectangle.x, y: rectangle.y}}
             style={{
+              border: `2px dashed #fff`,
+              borderPosition: 'inset',
+              fontSize: '14px',
               position: 'absolute',
               backgroundColor: rectangle.color,
               display: 'flex',
@@ -38,6 +48,20 @@ class Canvas extends Component {
               justifyContent: 'center',
               color: 'rgba(255,255,255, 0.5)'
             }}>
+            <a
+              alt="hey"
+              className="edit-rectangle"
+              onClick={() => editRectangle(i)}
+              role="button">
+              <i className="fas fa-edit"/>
+            </a>
+
+            <a
+              className="delete-rectangle"
+              onClick={() => deleteRectangle(i)}
+              role="button">
+              <i className="fas fa-times"/>
+            </a>
           </Rnd>
         ))
         :

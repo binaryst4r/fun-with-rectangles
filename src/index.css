@@ -113,7 +113,10 @@ body {
 
 .block-picker {
   position: absolute !important;
-  top: 150px;
+  top: 52%;
+  right: 0;
+  left: 0;
+  margin: auto;
 }
 
 #add-to-canvas-button {
@@ -133,7 +136,6 @@ body {
 
 #layout-list {
   width: 80%;
-  margin-top: 40px;
   list-style-type: none;
   padding-left: 0px;
 }
@@ -157,5 +159,20 @@ a.delete-layout {
 
 
 #clear-canvas {
+  width: 80%;
+  height: 35px;
+  color: #fff;
+  background-color: #e76f51;
+  border: none;
+  margin-top: 10px;
+}
 
+
+a.edit-rectangle, a.delete-rectangle {
+  cursor: pointer;
+  margin: 10px;
+}
+
+a.edit-rectangle:hover, a.delete-rectangle:hover {
+  color: #fff;
 }

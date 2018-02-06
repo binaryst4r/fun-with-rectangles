@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import Canvas from './components/canvas';
-import Rnd from 'react-rnd';
 import { BlockPicker } from 'react-color';
 
 class App extends Component {
@@ -13,7 +11,8 @@ class App extends Component {
     rectangles: [],
     savedLayouts: [],
     showColorPicker: false,
-    editingLayout: false
+    editingLayout: false,
+    nameInvalid: false
   }
 
   componentWillMount() {
@@ -46,6 +45,12 @@ class App extends Component {
 
   _saveCanvas = () => {
     const {rectangles, savedLayouts, layoutName} = this.state;
+    if (!layoutName) {
+      return this.setState({
+        nameInvalid: true
+      })
+    }
+
     let layouts = savedLayouts
     let layout = Object.assign({}, {layout: rectangles}, {name: layoutName})
     layouts.push(layout)
@@ -92,6 +97,17 @@ class App extends Component {
     })
   }
 
+  editRectangle = (index) => {
+    console.log(index)
+  }
+
+  deleteRectangle = (index) => {
+    let newRectangles = this.state.rectangles;
+    newRectangles.splice(index, 1)
+    this.setState({
+      rectangles: newRectangles
+    })
+  }
   _toggleColorPicker = () => {
     this.setState({
       showColorPicker: !this.state.showColorPicker
@@ -122,6 +138,7 @@ class App extends Component {
       editing: true
     })
   }
+
   componentDidMount() {
     const canvas = document.getElementById('canvas')
     this.setState({
@@ -134,9 +151,8 @@ class App extends Component {
     const {
       rectangles,
       color,
-      x,
-      y,
-      savedLayouts
+      savedLayouts,
+      nameInvalid
     } = this.state;
 
 
@@ -144,10 +160,10 @@ class App extends Component {
       <div className="App">
         <div id="main-content">
           <div id="rect-builder">
-            <p id="rect-builder-description">
+            {/* <p id="rect-builder-description">
               Choose a color and add it to the canvas. Once added, you can&nbsp;
               change size and position as you please!
-            </p>
+            </p> */}
             <div
               style={{
                 backgroundColor: color
@@ -171,25 +187,36 @@ class App extends Component {
                 <i className="fas fa-plus"/>&nbsp;
                 Add Rectangle
               </button>
+
+              <button
+                id="clear-canvas"
+                onClick={() => this._clearCanvas()}>
+                <i className="fas fa-recycle"/>&nbsp;
+                Clear Canvas
+              </button>
           </div>
 
           <Canvas
+            deleteRectangle={this.deleteRectangle}
+            editRectangle={this.editRectangle}
             updateRectangle={this.updateRectangle}
             rectangles={rectangles} />
 
           <div id="saved-layouts">
             <div id="save-layout-form">
               <input
+                style={nameInvalid ? {border: '1px solid red', color: 'red'} : null}
                 placeholder='Name your layout'
                 value={this.state.layoutName}
                 onChange={(e) => this._handleNameChange(e.target.value)}
                 type="text"/>
               <button
                 onClick={() => this._saveCanvas()}>
-                Save Canvas
+                Save
               </button>
             </div>
             <ul id="layout-list">
+              <h4>My Layouts</h4>
               {savedLayouts.length ? savedLayouts.map((layout, i) => (
                 <li
                   key={i}
@@ -213,11 +240,6 @@ class App extends Component {
                 null
               }
             </ul>
-            <button
-              id="clear-canvas"
-              onClick={() => this._clearCanvas()}>
-              Clear Canvas
-            </button>
           </div>
         </div>
       </div>
