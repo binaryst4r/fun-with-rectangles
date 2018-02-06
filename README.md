@@ -1,3 +1,9 @@
-Fun with rectangles lets you add and manipulate rectangles on a canvas. In addition to the requested features, I added the ability to duplicate a canvas. This allows users to save time and build off of different layouts. Tested in Chrome, Firefox, Safari, and IE.
+Fun with rectangles lets you add and manipulate rectangles on a canvas!
+
+## Additional Features
+- Duplicate a canvas to build off of existing layouts and save as their own.
+- Much needed z-index manipulation so that you can change how the rectangles stack on each other.
+
+Tested in Chrome, Firefox, Safari, and IE.
 
 Enjoy rectangling!
